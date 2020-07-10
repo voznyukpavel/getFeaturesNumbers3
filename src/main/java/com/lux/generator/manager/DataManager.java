@@ -4,19 +4,24 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.WeakHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.lux.generator.model.DataModel;
 import com.lux.generator.storage.EntitiesPluginsStorage;
 import com.lux.generator.util.Connector;
 import com.lux.generator.util.FileManager;
 
+
+
 public class DataManager {
 
-	private final String GIT_LAB_TOK= "gitLab_tok";
-	private final String FILE="file.bat";
+	private final Logger logger = Logger.getLogger(DataManager.class.getName());
+		
+	private final String GIT_LAB_TOK = "gitLab_tok";
+	private final String FILE = "file.bat";
+	
 	private String path;
 	private String gitLab;
 	private String artifactory;
@@ -31,22 +36,20 @@ public class DataManager {
 		this.command = args[4].trim();
 		EntitiesPluginsStorage.getInstance();
 		EntitiesPluginsStorage.setData(new DataCreator().create(projects));
-		command=setGitLabToCommand();
+		command = setGitLabToCommand();
 		getConnection();
 		EntitiesPluginsStorage.addWay(command);
-		File file= new File(FILE);
+		File file = new File(FILE);
 		try {
 			saveBatFile(file, command);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, ErrorMessagesStringFinals.IO_ERROR_MESSAGE, e);
 		}
-		
+
 	}
 
 	private String setGitLabToCommand() {
 		return command.replace(GIT_LAB_TOK, gitLab);
-		
 	}
 
 	private void getConnection() {
@@ -54,11 +57,9 @@ public class DataManager {
 		try {
 			addNumbers(Connector.setConnection(path, artifactory));
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, ErrorMessagesStringFinals.MALFORMED_ERROR_MESSAGE, e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, ErrorMessagesStringFinals.IO_ERROR_MESSAGE, e);
 		}
 	}
 
