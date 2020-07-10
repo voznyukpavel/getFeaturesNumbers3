@@ -69,39 +69,8 @@ public class DataManager {
 		EntitiesPluginsStorage.addNumber(result);
 	}
 
-	public void addItem(String name, String search, String project_name, String suffix) {
-		DataModel jsonItem = new DataModel(name, search, project_name, suffix);
-		EntitiesPluginsStorage.addJsonEntity(jsonItem);
-	}
-
-	public ArrayList<DataModel> getData() {
-		return EntitiesPluginsStorage.getJsonEntity();
-	}
-
-	public void deleteItem(Object[] selection) {
-		DataModel[] dest = new DataModel[selection.length];
-		System.arraycopy(selection, 0, dest, 0, selection.length);
-		EntitiesPluginsStorage.deleteJSONEntity(dest);
-	}
-
-	public void updateItem(Object selection, String name, String search, String project_name, String suffix,
-			String order_priority, String number, String way) {
-		EntitiesPluginsStorage.updateJsonEntity((DataModel) selection, name, search, project_name, suffix,
-				order_priority, number, way);
-	}
-
-	public void clean() {
-		EntitiesPluginsStorage.clean();
-	}
-
-	public void setData(Object[] objects) {
-		DataModel[] dest = new DataModel[objects.length];
-		System.arraycopy(objects, 0, dest, 0, objects.length);
-		EntitiesPluginsStorage.setData(dest);
-	}
-
-	private void saveBatFile(File file, String commandAreaText) throws IOException {
-		CommandParser parser = new CommandParser(EntitiesPluginsStorage.getJsonEntity(), commandAreaText);
+	private void saveBatFile(File file, String commandString) throws IOException {
+		CommandParser parser = new CommandParser(EntitiesPluginsStorage.getJsonEntity(), commandString);
 		String command = parser.getCommand();
 		FileManager.saveBat(file, command);
 	}
