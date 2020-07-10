@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.lux.generator.model.JSONArtifactModel;
+import com.lux.generator.model.DataModel;
 
 class CommandParser {
 
@@ -12,13 +12,13 @@ class CommandParser {
     private static final String SEPARATE = "<<<SEPARATE>>>";
     private static final String SEPARATOR_TEXT_EMPTIES = SEPARATE + ".*" + "[\r\n]*";
 
-    private final ArrayList<JSONArtifactModel> jsonEntity;
+    private final ArrayList<DataModel> jsonEntity;
     private final String commandAreaText;
     private String lineSeparator = System.lineSeparator();
     private Pattern emptyStringPattern = Pattern.compile(EMPTY_STRINGS);
 
-    public CommandParser(ArrayList<JSONArtifactModel> jsonEntity, String commandAreaText) {
-        this.jsonEntity = jsonEntity;
+    public CommandParser(ArrayList<DataModel> entity, String commandAreaText) {
+        this.jsonEntity = entity;
         this.commandAreaText = commandAreaText;
     }
 
@@ -28,7 +28,7 @@ class CommandParser {
         return combineCommand(parts);
     }
 
-    private ArrayList<String> createCommand(ArrayList<JSONArtifactModel> arrayList) {
+    private ArrayList<String> createCommand(ArrayList<DataModel> arrayList) {
         ArrayList<String> parts = new ArrayList<String>();
         Pattern splitter = Pattern.compile(SEPARATOR_TEXT_EMPTIES);
         int size = arrayList.size();

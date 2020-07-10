@@ -3,107 +3,106 @@ package com.lux.generator.manager;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.WeakHashMap;
 
-import org.json.simple.parser.ParseException;
-
-import com.lux.generator.events.ConnectionEvent;
-import com.lux.generator.listeners.DataPanelListener;
-import com.lux.generator.model.JSONArtifactModel;
-import com.lux.generator.storage.JSONEntitiesPluginsStorage;
+import com.lux.generator.model.DataModel;
+import com.lux.generator.storage.EntitiesPluginsStorage;
+import com.lux.generator.util.Connector;
 import com.lux.generator.util.FileManager;
 
 public class DataManager {
 
-    private static ArrayList<DataPanelListener> observers;
-    private InputStream inputData;
+	private final String GIT_LAB_TOK= "gitLab_tok";
+	private final String FILE="file.bat";
+	private String path;
+	private String gitLab;
+	private String artifactory;
+	private String projects;
+	private String command;
 
-    public DataManager() {
-        observers = new ArrayList<DataPanelListener>();
-        JSONEntitiesPluginsStorage.getInstance();
-    }
+	public DataManager(String[] args) {
+		this.path = args[0].trim();
+		this.gitLab = args[1].trim();
+		this.artifactory = args[2].trim();
+		this.projects = args[3].trim();
+		this.command = args[4].trim();
+		EntitiesPluginsStorage.getInstance();
+		EntitiesPluginsStorage.setData(new DataCreator().create(projects));
+		command=setGitLabToCommand();
+		getConnection();
+		EntitiesPluginsStorage.addWay(command);
+		File file= new File(FILE);
+		try {
+			saveBatFile(file, command);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
-    public void addNumbers(InputStream inputData) throws IOException, ParseException {
-        LinkedList<String> searchList = JSONEntitiesPluginsStorage.getSearch();
-        NumberParser parser = new NumberParser(searchList);
-        WeakHashMap<String, String> result = parser.readFromInStream(inputData);
-        JSONEntitiesPluginsStorage.addNumber(result);
-        notifyObservers();
-    }
+	private String setGitLabToCommand() {
+		return command.replace(GIT_LAB_TOK, gitLab);
+		
+	}
 
-    public void createWay(String way) {
-        JSONEntitiesPluginsStorage.addWay(way);
-        notifyObservers();
-    }
+	private void getConnection() {
+		Connector.getInstance();
+		try {
+			addNumbers(Connector.setConnection(path, artifactory));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-    public void addItem(String name, String search, String project_name, String suffix, String order_priority,
-            String number, String way) {
-        JSONArtifactModel jsonItem = new JSONArtifactModel(name, search, project_name, suffix, order_priority, number,
-                way);
-        JSONEntitiesPluginsStorage.addJsonEntity(jsonItem);
-        notifyObservers();
-    }
+	private void addNumbers(InputStream inputData) throws IOException {
+		LinkedList<String> searchList = EntitiesPluginsStorage.getSearch();
+		NumberParser parser = new NumberParser(searchList);
+		WeakHashMap<String, String> result = parser.readFromInStream(inputData);
+		EntitiesPluginsStorage.addNumber(result);
+	}
 
-    public ArrayList<JSONArtifactModel> getData() {
-        return JSONEntitiesPluginsStorage.getJsonEntity();
-    }
+	public void addItem(String name, String search, String project_name, String suffix) {
+		DataModel jsonItem = new DataModel(name, search, project_name, suffix);
+		EntitiesPluginsStorage.addJsonEntity(jsonItem);
+	}
 
-    private void notifyObservers() {
-        int size = observers.size();
-        for (int i = 0; i < size; i++) {
-            DataPanelListener observer = (DataPanelListener) observers.get(i);
-            observer.setDataToTable();
-        }
-    }
+	public ArrayList<DataModel> getData() {
+		return EntitiesPluginsStorage.getJsonEntity();
+	}
 
+	public void deleteItem(Object[] selection) {
+		DataModel[] dest = new DataModel[selection.length];
+		System.arraycopy(selection, 0, dest, 0, selection.length);
+		EntitiesPluginsStorage.deleteJSONEntity(dest);
+	}
 
-    private void notifyObserversSession() {
-        int size = observers.size();
-        for (int i = 0; i < size; i++) {
-            DataPanelListener observer = (DataPanelListener) observers.get(i);
-            observer.getInputData(new ConnectionEvent(this, inputData));
-        }
-    }
+	public void updateItem(Object selection, String name, String search, String project_name, String suffix,
+			String order_priority, String number, String way) {
+		EntitiesPluginsStorage.updateJsonEntity((DataModel) selection, name, search, project_name, suffix,
+				order_priority, number, way);
+	}
 
-    public void registerObserver(DataPanelListener observer) {
-        observers.add(observer);
-    }
+	public void clean() {
+		EntitiesPluginsStorage.clean();
+	}
 
-    public void deleteItem(Object[] selection) {
-        JSONArtifactModel[] dest = new JSONArtifactModel[selection.length];
-        System.arraycopy(selection, 0, dest, 0, selection.length);
-        JSONEntitiesPluginsStorage.deleteJSONEntity(dest);
-        notifyObservers();
-    }
+	public void setData(Object[] objects) {
+		DataModel[] dest = new DataModel[objects.length];
+		System.arraycopy(objects, 0, dest, 0, objects.length);
+		EntitiesPluginsStorage.setData(dest);
+	}
 
-    public void getInputStreamConnection(InputStream inputData) {
-        this.inputData = inputData;
-        notifyObserversSession();
-    }
-
-    public void updateItem(Object selection, String name, String search, String project_name, String suffix,
-            String order_priority, String number, String way) {
-        JSONEntitiesPluginsStorage.updateJsonEntity((JSONArtifactModel) selection, name, search, project_name, suffix,
-                order_priority, number, way);
-        notifyObservers();
-    }
-
-    public void clean() {
-        JSONEntitiesPluginsStorage.clean();
-        notifyObservers();
-    }
-
-    public void setData(Object[] objects) {
-        JSONArtifactModel[] dest = new JSONArtifactModel[objects.length];
-        System.arraycopy(objects, 0, dest, 0, objects.length);
-        JSONEntitiesPluginsStorage.setData(dest);
-    }
-
-    public void saveBatFile(File file, String commandAreaText) throws IOException {
-        CommandParser parser = new CommandParser(JSONEntitiesPluginsStorage.getJsonEntity(), commandAreaText);
-        String command = parser.getCommand();
-        FileManager.saveBat(file, command);
-    }
+	private void saveBatFile(File file, String commandAreaText) throws IOException {
+		CommandParser parser = new CommandParser(EntitiesPluginsStorage.getJsonEntity(), commandAreaText);
+		String command = parser.getCommand();
+		FileManager.saveBat(file, command);
+	}
 }

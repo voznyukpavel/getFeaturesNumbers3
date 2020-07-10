@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-public class JSONArtifactModel {
+public class DataModel {
 
 	private final String uuid;
 	private String name = "";
@@ -12,20 +12,15 @@ public class JSONArtifactModel {
 	private String projectName = "";
 	private String suffix = "";
 	private String way = "";
-	private int orderPriority = 0;
 	private String number = "";
 
-	public JSONArtifactModel(String name, String search, String projectName, String suffix, String orderPriority,
-			String number, String way) {
+	public DataModel(String name, String search, String projectName, String suffix) {
 		super();
 		this.uuid = UUID.randomUUID().toString();
 		this.name = name;
 		this.search = search;
 		this.projectName = projectName;
 		this.suffix = suffix;
-		this.orderPriority = getIntPriority(orderPriority);
-		this.way = way;
-		this.number = number;
 	}
 
 	public String getSuffix() {
@@ -33,7 +28,7 @@ public class JSONArtifactModel {
 	}
 
 	public String getSubSuffix(int number) {
-		StringTokenizer st = new StringTokenizer(suffix, " ");
+		StringTokenizer st = new StringTokenizer(suffix, "|");
 		String subSuffix = st.nextToken();
 		try {
 			for (int i = 0; i < number; i++) {
@@ -57,14 +52,6 @@ public class JSONArtifactModel {
 		this.number = number;
 	}
 
-	private int getIntPriority(String orderPriority) {
-		try {
-			return Integer.parseInt(orderPriority);
-		} catch (NumberFormatException ex) {
-			return 0;
-		}
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -81,18 +68,14 @@ public class JSONArtifactModel {
 		return way;
 	}
 
-	public String getOrderPriority() {
-		return String.valueOf(orderPriority);
-	}
-
 	public String getUuid() {
 		return uuid;
 	}
 
 	@Override
 	public String toString() {
-		return "JSONArtifactModel [uuid=" + uuid + ", name=" + name + ", search=" + search + ", project_name="
-				+ projectName + ", suffix=" + suffix + ", way=" + way + ", order_priority=" + orderPriority
-				+ ", number=" + number + "]";
+		return "DataModel [uuid=" + uuid + ", name=" + name + ", search=" + search + ", projectName=" + projectName
+				+ ", suffix=" + suffix + ", way=" + way + ", number=" + number + "]";
 	}
+	
 }
