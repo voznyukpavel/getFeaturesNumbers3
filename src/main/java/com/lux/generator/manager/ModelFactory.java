@@ -21,5 +21,4 @@ public class ModelFactory implements IModelFactory<DataModel> {
 		}
 		return new DataModel(name, search, project, suffix);
 	}
-
 }

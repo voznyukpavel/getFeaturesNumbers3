@@ -71,7 +71,7 @@ public class DataManager {
 	}
 
 	private void saveBatFile(File file, String commandString) throws IOException {
-		CommandParser parser = new CommandParser(EntitiesPluginsStorage.getJsonEntity(), commandString);
+		CommandParser parser = new CommandParser(EntitiesPluginsStorage.getEntity(), commandString);
 		String command = parser.getCommand();
 		FileManager.saveBat(file, command);
 	}

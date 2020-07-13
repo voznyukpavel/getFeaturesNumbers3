@@ -1,7 +1,6 @@
 package com.lux.generator.storage;
 
 import java.util.ArrayList;
-import java.util.Arrays; 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.WeakHashMap;
@@ -26,21 +25,8 @@ public class EntitiesPluginsStorage {
         return instance;
     }
 
-    public static ArrayList<DataModel> getJsonEntity() {
+    public static ArrayList<DataModel> getEntity() {
         return entity;
-    }
-
-    public static void setJsonEntity(ArrayList<DataModel> jsonEntity) {
-        EntitiesPluginsStorage.entity = jsonEntity;
-    }
-
-    public static void addJsonEntity(DataModel jsonItem) {
-        entity.add(jsonItem);
-    }
-
-    public static void deleteJSONEntity(DataModel[] selection) {
-        List<DataModel> list = Arrays.asList(selection);
-        entity.removeAll(list);
     }
 
     public static void addNumber(WeakHashMap<String, String> result) {
@@ -53,19 +39,6 @@ public class EntitiesPluginsStorage {
                     entity.get(i).setNumber(result.get(search));
                     result.remove(search);
                 }
-            }
-        }
-    }
-
-    public static void updateJsonEntity(DataModel jsonItem, String name, String search, String project_name,
-            String suffix, String order_priority, String number, String way) {
-        String uuid = jsonItem.getUuid();
-        int size = entity.size();
-        for (int i = 0; i < size; i++) {
-            if (uuid.equals(entity.get(i).getUuid())) {
-                entity.set(i,
-                        new DataModel(name, search, project_name, suffix));
-                break;
             }
         }
     }
@@ -119,21 +92,10 @@ public class EntitiesPluginsStorage {
         }
         return searchItem;
     }
-
-    public static void clean() {
-        entity.clear();
-    }
-
-    public static void setData(DataModel[] dest) {
-        List<DataModel> list = Arrays.asList(dest);
-        clean();
-        entity.addAll(list);
-    }
     
     public static void setData(ArrayList<DataModel> dest) {
         List<DataModel> list =dest;
-        clean();
+        entity.clear();
         entity.addAll(list);
     }
-
 }
