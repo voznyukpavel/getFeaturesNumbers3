@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class FileManager {
 
-    public static void saveBat(File file, String data) throws IOException {
+    public static void saveExecFile(File file, String data) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
         writer.write(data);
         writer.close();

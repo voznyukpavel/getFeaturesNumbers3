@@ -2,11 +2,9 @@ package com.lux.generator.model;
 
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-import java.util.UUID;
 
 public class DataModel {
 
-	private final String uuid;
 	private String name = "";
 	private String search = "";
 	private String projectName = "";
@@ -16,7 +14,6 @@ public class DataModel {
 
 	public DataModel(String name, String search, String projectName, String suffix) {
 		super();
-		this.uuid = UUID.randomUUID().toString();
 		this.name = name;
 		this.search = search;
 		this.projectName = projectName;
@@ -28,7 +25,7 @@ public class DataModel {
 	}
 
 	public String getSubSuffix(int number) {
-		StringTokenizer st = new StringTokenizer(suffix, "|");
+		StringTokenizer st = new StringTokenizer(suffix, "*");
 		String subSuffix = st.nextToken();
 		try {
 			for (int i = 0; i < number; i++) {
@@ -68,13 +65,9 @@ public class DataModel {
 		return way;
 	}
 
-	public String getUuid() {
-		return uuid;
-	}
-
 	@Override
 	public String toString() {
-		return "DataModel [uuid=" + uuid + ", name=" + name + ", search=" + search + ", projectName=" + projectName
+		return "DataModel [name=" + name + ", search=" + search + ", projectName=" + projectName
 				+ ", suffix=" + suffix + ", way=" + way + ", number=" + number + "]";
 	}
 	
