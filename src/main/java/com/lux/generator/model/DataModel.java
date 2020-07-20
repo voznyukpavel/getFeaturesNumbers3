@@ -1,5 +1,6 @@
 package com.lux.generator.model;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -24,6 +25,16 @@ public class DataModel {
 		return suffix;
 	}
 
+	public ArrayList<String> getSubSuffixes() {
+	    ArrayList<String>list= new ArrayList<>();
+	    StringTokenizer defaultTokenizer = new StringTokenizer("*");
+	    while (defaultTokenizer.hasMoreTokens())
+	    {
+	        list.add(defaultTokenizer.nextToken());
+	    }
+	    return list;
+	}
+	
 	public String getSubSuffix(int number) {
 		StringTokenizer st = new StringTokenizer(suffix, "*");
 		String subSuffix = st.nextToken();

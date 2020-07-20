@@ -98,4 +98,35 @@ public class EntitiesPluginsStorage {
         entity.clear();
         entity.addAll(list);
     }
+    
+    public static DataModel getByName(String name) {
+        int size=entity.size();
+        for(int i=0;i<size;i++) {
+            if(entity.get(i).getName().equals(name)) {
+                return entity.get(i);
+            }
+        }
+        return null;
+    }
+    
+    public static ArrayList<DataModel> getBySearch(String search) {
+        ArrayList<DataModel> list= new ArrayList<>();
+        int size=entity.size();
+        for(int i=0;i<size;i++) {
+            if(entity.get(i).getSearch().equals(search)) {
+                list.add(entity.get(i));
+            }
+        }
+        return list;
+    }
+
+    public static void addNumberByName(String name, String number) {
+        int size=entity.size();
+        for(int i=0;i<size;i++) {
+            if(entity.get(i).getName().equals(name)) {
+                entity.get(i).setNumber(number);
+                break;
+            }
+        }
+    }
 }

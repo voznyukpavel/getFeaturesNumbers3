@@ -1,6 +1,6 @@
 package com.lux.generator.storage;
 
-enum ParseEnum {
+public enum ParseEnum {
     NAME("\"name\""), 
     PROJECT_NAME("\"project_name\""), 
     SUFFIX("\"suffix"),
@@ -14,7 +14,7 @@ enum ParseEnum {
         this.parse = parse;
     }
 
-    String getParse() {
+   public String getParse() {
         return parse;
     }
 }

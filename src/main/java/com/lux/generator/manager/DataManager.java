@@ -18,7 +18,7 @@ public class DataManager {
     private final Logger logger = Logger.getLogger(DataManager.class.getName());
 
     private final String GIT_LAB_TOK = "gitLab_tok";
-    private final String ARTIFACTORY_TOK1="artifactory1";
+    private final String ARTIFACTORY_TOK1="artifactory1_tok";
     private final String ARTIFACTORY_TOK2="artifactory2";
     private final String END_OF_PATH = "features/";
     private final String FILE = "file.sh";
@@ -33,7 +33,9 @@ public class DataManager {
     private String tagName;
 
     public DataManager(String[] args) {
-     
+        //for(int i=0;i<args.length;i++) {
+            //args[i]=args[i].replace("&#10;", "\r\n");
+        //}
         this.path = args[0].trim();
         this.gitLab = args[1].trim();
         this.artifactory1 = args[2].trim();
@@ -45,6 +47,9 @@ public class DataManager {
         checkPath();
         EntitiesPluginsStorage.getInstance();
         EntitiesPluginsStorage.setData(new DataCreator().create(projects));
+        if(!EntitiesPluginsStorage.getBySearch("0").isEmpty()) {
+            new NonInstallablessNumberGetter(path,artifactory1);
+        }
         command = setTokensToCommand();
         getConnection();
         EntitiesPluginsStorage.addWay(command);
