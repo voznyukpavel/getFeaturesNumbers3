@@ -34,8 +34,8 @@ public class DataManager {
 
     public DataManager(String[] args) {
         //for(int i=0;i<args.length;i++) {
-            //args[i]=args[i].replace("&#10;", "\r\n");
-        //}
+          //  args[i]=args[i].replace("&#10;", "\r\n");
+       // }
         this.path = args[0].trim();
         this.gitLab = args[1].trim();
         this.artifactory1 = args[2].trim();

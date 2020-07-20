@@ -67,14 +67,26 @@ public class NonInstallablessNumberGetter {
                 }
             } while (character != '\n');
             if (elderThanInstallables(searchedString)) {
-                EntitiesPluginsStorage.addNumberByName(name,temp);
                 break;
             }
-            temp = getNumbersByRegular(searchedString);
+            if (contentsNumber(searchedString)) {
+                temp = getNumbersByRegular(searchedString);
+            }
+
         }
+        EntitiesPluginsStorage.addNumberByName(name,temp);
         setConnection.close();
     }
-
+    
+    private boolean contentsNumber(String searchedString) {
+        Pattern pattern = Pattern.compile(TIMESTAMP_REGULAR_EXPRESSION);
+        Matcher matcher1 = pattern.matcher(searchedString);
+        if (matcher1.find()) {
+            return true;
+        }
+        return false;
+    }
+    
     private boolean elderThanInstallables(String searchedString) {
         Pattern pattern = Pattern.compile(TIMESTAMP_REGULAR_EXPRESSION);
         Matcher matcher1 = pattern.matcher(searchedString);

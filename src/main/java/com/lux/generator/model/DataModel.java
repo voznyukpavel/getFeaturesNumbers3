@@ -27,10 +27,10 @@ public class DataModel {
 
 	public ArrayList<String> getSubSuffixes() {
 	    ArrayList<String>list= new ArrayList<>();
-	    StringTokenizer defaultTokenizer = new StringTokenizer("*");
-	    while (defaultTokenizer.hasMoreTokens())
+	    StringTokenizer st = new StringTokenizer(suffix,"*");
+	    while (st.hasMoreTokens())
 	    {
-	        list.add(defaultTokenizer.nextToken());
+	        list.add(st.nextToken());
 	    }
 	    return list;
 	}
