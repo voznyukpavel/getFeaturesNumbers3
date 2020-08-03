@@ -19,7 +19,7 @@ public class DataManager {
 
     private final String GIT_LAB_TOK = "gitLab_tok";
     private final String ARTIFACTORY_TOK1="artifactory1_tok";
-    private final String ARTIFACTORY_TOK2="artifactory2";
+    private final String ARTIFACTORY_TOK2="artifactory2_tok";
     private final String END_OF_PATH = "features/";
     private final String FILE = "file.sh";
     private final String TAG= "tagName";
